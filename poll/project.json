@@ -1,0 +1,8 @@
+{
+  "name": "poll",
+  "description": "A simple poll for hack salem",
+  "memory": 128,
+  "timeout": 5,
+  "role": "arn:aws:iam::902353888911:role/poll_lambda_function",
+  "environment": {}
+}
