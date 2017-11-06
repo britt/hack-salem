@@ -1,0 +1,174 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>HACK Salem! - AWS Lambda</title>
+
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/black.css">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/zenburn.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section>
+				<h1>
+					<span style="text-transform: lowercase">λ</span> AWS Lambda
+				</h1>
+			</section>
+			<section>
+				<h2>Functions for rent</h2>
+				<div>
+					Run a single function in response to an event.
+				</div>
+				<pre>
+					<code lang="javascript">
+exports.handler = (event, context, callback) => {
+	callback(null, 'The time is ' + new Date());
+};
+					</code>
+					</pre>
+				<div>
+					Pay per use, first million free.
+				</div>
+			</section>
+			<section>
+				<h2>OK, but why?</h2>
+				<ul>
+					<li>
+						<a href="https://martinfowler.com/articles/microservices.html" title="explanation of microservices">
+							Microservices man...
+						</a>
+					</li>
+					<li>No servers == No admin</li>
+					<li>No servers == No scaling</li>
+					<li>
+						<a href="https://docs.aws.amazon.com/lambda/latest/dg/invoking-lambda-function.html" title="AWS Lambda trigger list">
+							Integration with AWS events
+						</a>
+					</li>
+				</ul>
+			</section>
+			<section>
+				<h2>Supported Languages</h2>
+				<ul>
+					<li>Javascript (with Node.js)</li>
+					<li>Python</li>
+					<li>Java</li>
+					<li>C# (.NET Core)</li>
+				</ul>
+			</section>
+			<section>
+				<h2>Limitations</h2>
+				<ul>
+					<li>300s max execution time</li>
+					<li>RAM 1536MB</li>
+					<li>Ephemeral disk 512MB</li>
+				</ul>
+			</section>
+			<section>
+				<h2>Creating a lambda function</h2>
+				<img src="/images/lambda_console.png" alt="AWS Lambda function editor" />
+			</section>
+			<section>
+				<h2>Deploying with API Gateway</h2>
+				<img src="/images/api_gateway.png" alt="AWS API Gateway dashboard" />
+			</section>
+			<section>
+				<h2>
+					<a href="http://apex.run/" title="the Apex framework">Apex.run</a>
+				</h2>
+				<div>
+					Framework for managing lambda that takes care of the boilerplate and supports hipster languages.
+				</div>
+				<ul>
+					<li>Go</li>
+					<li>Rust</li>
+					<li>Clojure</li>
+					<li>Scala</li>
+					<li>&amp;c.</li>
+				</ul>
+				<br />
+				<br />
+				<small>
+					<em>
+						Lambda let's you bundle assets and fork procresses so you can run anything really.
+					</em>
+				</small>
+			</section>
+			<section>
+				<h2>/function_name/index.js</h2>
+				<pre>
+					<code language="javascript">
+const doc = require('dynamodb-doc')
+const dynamo = new doc.DynamoDB()
+
+exports.handle = function (event, context, callback) {
+	dynamo.putItem({
+	'TableName': 'votes',
+	'Item': {
+		'ip_addr': event.ipAddress,
+		'vote': event.vote
+	}
+	}, function (err, data) {
+	if (err) {
+		callback(null, { error: `error recording vote: ${err}` })
+	} else {
+		dynamo.scan({
+		'TableName': 'votes'
+		}, function (err, data) {
+		if (err) {
+			callback(null, { error: `error retrieving votes: ${err}` })
+		} else {
+			let votes = {}
+			data.Items.forEach(d => { votes[d.vote] ? votes[d.vote] = votes[d.vote] + 1 : votes[d.vote] = 1 })
+			callback(null, { results: votes })
+		}
+		})
+	}
+	})
+}
+					</code>
+				</pre>
+			</section>
+			<section>
+				<h2>Code</h2>
+				<a href="https://github.com/britt/hack-salem">https://github.com/britt/hack-salem</a>
+			</section>
+		</div>
+	</div>
+
+	<script src="lib/js/head.min.js"></script>
+	<script src="js/reveal.js"></script>
+
+	<script>
+		// More info about config & dependencies:
+		// - https://github.com/hakimel/reveal.js#configuration
+		// - https://github.com/hakimel/reveal.js#dependencies
+		Reveal.initialize({
+			dependencies: [
+				{ src: 'plugin/markdown/marked.js' },
+				{ src: 'plugin/markdown/markdown.js' },
+				{ src: 'plugin/notes/notes.js', async: true },
+				{ src: 'plugin/highlight/highlight.js', async: true, callback: function () { hljs.initHighlightingOnLoad(); } },
+			]
+		});
+	</script>
+</body>
+
+</html>
