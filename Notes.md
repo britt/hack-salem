@@ -3,6 +3,7 @@
 ## Outline
 
 1. What is lambda?
+    - Functions for rent
 2. Creating a lambda function
     1. Hello World!
     2. API Gateway
