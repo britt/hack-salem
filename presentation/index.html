@@ -21,6 +21,11 @@
 		link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
 		document.getElementsByTagName('head')[0].appendChild(link);
 	</script>
+	<style>
+		table.triggers tr td {
+			font-size: 78%
+		}
+	</style>
 </head>
 
 <body>
@@ -65,6 +70,42 @@ exports.handler = (event, context, callback) => {
 				</ul>
 			</section>
 			<section>
+				<h2>AWS Integration</h2>
+				<table class="triggers">
+					<tr>
+						<td>Amazon S3</td>
+						<td>Amazon DynamoDB</td>
+						<td>Amazon Kinesis Streams</td>
+					</tr>
+					<tr>
+						<td>Amazon Simple Notification Service</td>
+						<td>Amazon Simple Email Service</td>
+						<td>Amazon Cognito</td>
+					</tr>
+					<tr>
+						<td>AWS CloudFormation</td>
+						<td>Amazon CloudWatch Logs</td>
+						<td>Amazon CloudWatch Events</td>
+					</tr>
+					<tr>
+						<td>AWS CodeCommit</td>
+						<td>Scheduled Events</td>
+						<td>AWS Config</td>
+					</tr>
+					<tr>
+						<td>Amazon Alexa</td>
+						<td>Amazon Lex</td>
+						<td>Amazon API Gateway</td>
+					</tr>
+					<tr>
+						<td>AWS IoT Button</td>
+						<td>Amazon CloudFront</td>
+						<td>Amazon Kinesis Firehose</td>
+					</tr>
+				</table>
+				<img src="/images/api_gateway.png" alt="AWS API Gateway dashboard" />
+			</section>
+			<section>
 				<h2>Supported Languages</h2>
 				<ul>
 					<li>Javascript (with Node.js)</li>
@@ -72,6 +113,13 @@ exports.handler = (event, context, callback) => {
 					<li>Java</li>
 					<li>C# (.NET Core)</li>
 				</ul>
+				<br />
+				<br />
+				<small>
+					<em>
+						Lambda let's you bundle assets and fork procresses so you can run anything really.
+					</em>
+				</small>
 			</section>
 			<section>
 				<h2>Limitations</h2>
@@ -86,8 +134,13 @@ exports.handler = (event, context, callback) => {
 				<img src="/images/lambda_console.png" alt="AWS Lambda function editor" />
 			</section>
 			<section>
-				<h2>Deploying with API Gateway</h2>
+				<h2>API Gateway</h2>
 				<img src="/images/api_gateway.png" alt="AWS API Gateway dashboard" />
+			</section>
+			<section>
+				<h2>What about dependencies?</h2>
+				<img src="/images/nodejs-dependencies.jpeg" alt="NPM Dependency Hell" />
+				<div>Bundle assets and dependencies in .zip file.</div>
 			</section>
 			<section>
 				<h2>
@@ -103,13 +156,6 @@ exports.handler = (event, context, callback) => {
 					<li>Scala</li>
 					<li>&amp;c.</li>
 				</ul>
-				<br />
-				<br />
-				<small>
-					<em>
-						Lambda let's you bundle assets and fork procresses so you can run anything really.
-					</em>
-				</small>
 			</section>
 			<section>
 				<h2>/function_name/index.js</h2>
@@ -147,7 +193,21 @@ exports.handle = function (event, context, callback) {
 				</pre>
 			</section>
 			<section>
-				<h2>Code</h2>
+				<h2>Event, Context, Callback</h2>
+				<ul>
+					<li>Event - request (or trigger) data</li>
+					<li>
+						<a href="https://docs.aws.amazon.com/lambda/latest/dg/nodejs-prog-model-context.html" title="Context Object Documentation">Context</a> - metadata about the lambda process<br/>
+						<small>e.g. remaining execution time, memory limits, Cognito ID</small>
+					</li>
+					<li>
+						Callback - how you respond<br/>
+						<small>Takes two parameters, the first modifies the reponse the second is the data payload.</small>
+					</li>
+				</ul>
+			</section>
+			<section>
+				<h2>Slides &amp; Code</h2>
 				<a href="https://github.com/britt/hack-salem">https://github.com/britt/hack-salem</a>
 			</section>
 		</div>
