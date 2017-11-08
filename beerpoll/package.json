@@ -1,6 +1,7 @@
 {
   "name": "beerpoll",
   "version": "0.1.0",
+  "homepage" : "https://brittcrawford.com/hack-salem",
   "private": true,
   "devDependencies": {
     "react-scripts": "1.0.17"
