@@ -1,6 +1,12 @@
 import React, { Component } from 'react'
 import './App.css'
 
+function VoteButton ({ onClick, children }) {
+  return <div class='button'>
+    <button onClick={onClick}>{children}</button>
+  </div>
+}
+
 class App extends Component {
   constructor (props) {
     super(props)
@@ -21,17 +27,17 @@ class App extends Component {
 
   loadResults () {
     fetch('https://hack-salem.brittcrawford.com/poll')
-    .then((res) => {
-      if (res.ok && res.headers.get('content-type').includes('application/json')) {
-        return res.json()
-      }
-      throw new Error('Problem loading results.')
-    }).then((data) => {
-      this.setState({loaded: true, results: data.results})
-    })
-    .catch((err) => {
-      console.log('error loading poll results', err)
-    })
+      .then((res) => {
+        if (res.ok && res.headers.get('content-type').includes('application/json')) {
+          return res.json()
+        }
+        throw new Error('Problem loading results.')
+      }).then((data) => {
+        this.setState({ loaded: true, results: data.results })
+      })
+      .catch((err) => {
+        console.log('error loading poll results', err)
+      })
   }
 
   componentDidMount () {
@@ -55,7 +61,7 @@ class App extends Component {
       })
     }).then(res => {
       if (res.ok) {
-        this.setState({voted: true})
+        this.setState({ voted: true })
         this.loadResults()
       }
     }).catch(err => { console.log('Error recording vote', err) })
@@ -72,25 +78,36 @@ class App extends Component {
     }
 
     return (
-      <div>
+      <div className='container'>
         <h1>HACK SALEM</h1>
-        <h2>Which beer do you like better?</h2>
         {
           this.state.voted
           ? null
-          : <form>
-            <div>
-              <button onClick={this.handleClick.bind(this, 'IPA')}>Vote</button> I like the IPA.
-            </div>
-            <div>
-              <button onClick={this.handleClick.bind(this, 'SOUR')}>Vote</button> The sour is my favorite.
-            </div>
-          </form>
+          : [
+            <h2>WHICH BEER DO YOU LIKE BETTER?</h2>,
+            <form>
+              <VoteButton onClick={this.handleClick.bind(this, 'IPA')}>
+                I like the IPA.
+              </VoteButton>
+              <VoteButton onClick={this.handleClick.bind(this, 'SOUR')}>
+                The sour is my favorite.
+              </VoteButton>
+            </form>
+          ]
         }
-        <h2>Results so far</h2>
-        <ul>
-          {Object.keys(this.state.results).map((k) => <li key={`result-${k}`}>{k} {this.state.results[k]} votes</li>)}
-        </ul>
+        <h2>RESULTS SO FAR...</h2>
+        <table className='results'>
+          <tr>
+            <th>BEER</th>
+            <th>VOTES</th>
+          </tr>
+          {Object.keys(this.state.results).map((k) => {
+            return <tr key={`result-${k}`}>
+              <td>{k}</td>
+              <td>{this.state.results[k]}</td>
+            </tr>
+          })}
+        </table>
       </div>
     )
   }
