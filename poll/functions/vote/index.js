@@ -1,11 +1,12 @@
-const doc = require('dynamodb-doc')
-const dynamo = new doc.DynamoDB()
+const AWS = require('aws-sdk')
+const dynamo = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'})
 
 exports.handle = function (e, ctx, cb) {
-  dynamo.putItem({
+  console.log('received event', e, e.vote)
+  dynamo.put({
     'TableName': 'votes',
     'Item': {
-      'ip_addr': e.ipAddress,
+      'id': e.id,
       'vote': e.vote
     }
   }, function (err, data) {
